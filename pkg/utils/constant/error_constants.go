@@ -50,9 +50,7 @@ const (
 	ErrOccurredWhenAccessingToken         = "0015"
 	ErrEmptyAuthHeaderCode                = "0016"
 	ErrInvalidAuthHeaderCode              = "0017"
-	ErrTokenDoesNotHaveRequiredRoleCode   = "0018"
 	ErrInvalidUserCredentialsCode         = "0019"
-	ErrInvalidRefreshTokenCode            = "0020"
 	ErrInvalidAuthCodeCode                = "0021"
 	// db error codes
 	ErrRecordNotFoundCode   = "0022"
@@ -102,21 +100,12 @@ const (
 	ErrInvalidPasswordChangeMsg          = "invalid password change request"
 	ErrInvalidPasswordChangeKeyMsg       = "invalid password change request key"
 	ErrPasswordChangeRequestExpiredMsg   = "password change request expired"
-	ErrInvalidAuthCodeMsg                = "invalid authorization code"
-	ErrOccurredWhenFetchingUserMsg       = "error occurred when fetching user"
-	ErrInvalidGetUserReqMsg              = "invalid get User request"
 	ErrOccurredWhenParsingReqQueryMsg    = "error occurred while parsing the request query"
-	// password error message
-	ErrPasswordChangeRequestDecodeMsg = "error Occurred when decode html template"
-	// email error message
-	ErrEmailUniqueConstraintViolationMsg = "Email already exists"
+	ErrInvalidAuthCodeMsg                = "invalid authorization code"
 	// timeonly error message
 	TimeFormatErrorMsg     = "Invalid time format. Time should be in the format HH:MM:SS."
 	InvalidTypeForTimeOnly = "invalid type %T for TimeOnly"
 	WorkTimeErrorMsg       = "Work start time must be less than work end time"
-	// redirection error message
-	ErrSearchKeyAlreadyExistsMsg   = "Search Key already exists"
-	ErrRedirectURLAlreadyExistsMsg = "Redirect URL already exists"
 )
 
 // util methods
@@ -143,7 +132,7 @@ const (
 
 // auth server errors
 const (
-	ServerInitFailError = "Failed to initialize authorization server"
+	ServerInitFailError = "Failed to initialize TaskHaven server"
 )
 
 // jwt errors

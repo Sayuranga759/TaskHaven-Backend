@@ -48,13 +48,6 @@ const (
 	File    = "file"
 	Debug   = "DEBUG"
 	JSON    = "json"
-
-	// auth constance
-	AuthSecret         = "AUTH_SECRET"
-	AuthTokenExpiresIn = "AUTH_TOKEN_EXPIRES_IN" // #nosec G101
-	AuthSigningMethod  = "AUTH_SIGNING_METHOD"
-	RsaPrivateKey      = "RSA_PRIVATE_KEY" // #nosec G101
-	HashingCost        = "HASHING_COST"
 )
 
 // configuration values
@@ -71,23 +64,11 @@ type CommonConfig struct {
 	_ struct{}
 	LogConfig
 	DBConfig
-	AuthConfig
 	SrvListenPort                string
 	ChildFiberProcessIdleTimeout time.Duration
 	Pprofenabled                 bool
-	AuthWebHostURL               string
-	ResetTimeDuration            int
-	ResetEmailTemplate           string
 }
 
-type AuthConfig struct {
-	_                  struct{}
-	AuthSecret         string `json:"_"`
-	AuthTokenExpiresIn time.Duration
-	AuthSigningMethod  string
-	RsaPrivateKey      string
-	HashingCost        int
-}
 
 type LogConfig struct {
 	_                           struct{}
@@ -159,7 +140,6 @@ func (config *CommonConfig) BuildConfig() *CommonConfig {
 	config = &CommonConfig{
 		LogConfig:                    logConfig,
 		DBConfig:                     config.getDBConfig(),
-		AuthConfig:                   config.getAuthConfig(),
 		ChildFiberProcessIdleTimeout: viper.GetDuration(ChildFiberProcessIdleTimeout),
 		SrvListenPort:                viper.GetString(SrvListenPort),
 		Pprofenabled:                 viper.GetBool(Pprofenabled),
@@ -183,16 +163,6 @@ func (config *CommonConfig) getDBConfig() DBConfig {
 		DBPassword: viper.GetString(DBPassword),
 		DBSSLMode:  viper.GetString(DBSSLMode),
 		ISCloudSQL: viper.GetBool(ISCloudSQL),
-	}
-}
-
-func (config *CommonConfig) getAuthConfig() AuthConfig {
-	return AuthConfig{
-		AuthSecret:         viper.GetString(AuthSecret),
-		AuthTokenExpiresIn: viper.GetDuration(AuthTokenExpiresIn),
-		AuthSigningMethod:  viper.GetString(AuthSigningMethod),
-		RsaPrivateKey:      viper.GetString(RsaPrivateKey),
-		HashingCost:        viper.GetInt(HashingCost),
 	}
 }
 
@@ -221,7 +191,7 @@ func (config *CommonConfig) getLogConfig() (LogConfig, *zap.Logger) {
 	if !slices.Contains(supportedLogFormats, logFormat) {
 		configLogger.Fatal("Invalid Log Format specified", zap.String(LogFormat, logFormat), zap.Strings("supportedLogFormats", supportedLogFormats))
 	} else {
-		configLogger.Info("log format is se to", zap.String(LogFormat, logFormat))
+		configLogger.Info("log format is set to", zap.String(LogFormat, logFormat))
 	}
 
 	logConfig := LogConfig{

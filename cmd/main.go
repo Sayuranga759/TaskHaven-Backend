@@ -27,6 +27,5 @@ func init() {
 }
 
 func main() {
-
 	appconfig.Start(routes.APIRoutes)
 }

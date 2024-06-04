@@ -80,10 +80,6 @@ const (
 	InactiveChangePwdRecord       = "Inactive change password record"
 	InvalidKeyForChangePwd        = "Invalid key for change password"
 	InvalidTokenForChangePwd      = "Invalid token for change password"
-	TimeExpiredForChangePwd       = "Time expired for change password"
-	ValidationSuccessForChangePwd = "Validations are success for change password"
-	SearchKeyAlreadyExists        = "Search key already exists"
-	RedirectURLAlreadyExists      = "Redirect URL already exists"
 	MethodOutput                  = "Method Output"
 	MethodError                   = "Method Error"
 	TraceMsgRespBody              = "Response Body"
@@ -120,8 +116,3 @@ const (
 	QueryParser          = "QueryParser"
 )
 
-// log const
-const (
-	Email  = "email"
-	UserID = "userId"
-)
