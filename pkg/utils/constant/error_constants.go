@@ -55,9 +55,14 @@ const (
 	// db error codes
 	ErrRecordNotFoundCode   = "0022"
 	ErrDatabaseCode         = "0023"
+	// email error
+	ErrEmailUniqueConstraintViolationCode = "0031"
 	ErrBeginTransactionCode = "0036"
 	// parse error
 	ErrStringToUintParseCode = "0024"
+	// decript error codes
+	ErrorOccurredWhenDecryptStringCode   = "0029"
+	ErrorOccurredWhenHashingPasswordCode = "0030"
 	//
 	ErrDataMarshalCode                 = "0037"
 	ErrDataUnmarshalCode               = "0038"
@@ -102,6 +107,8 @@ const (
 	ErrPasswordChangeRequestExpiredMsg   = "password change request expired"
 	ErrOccurredWhenParsingReqQueryMsg    = "error occurred while parsing the request query"
 	ErrInvalidAuthCodeMsg                = "invalid authorization code"
+		// email error message
+		ErrEmailUniqueConstraintViolationMsg = "Email already exists"
 	// timeonly error message
 	TimeFormatErrorMsg     = "Invalid time format. Time should be in the format HH:MM:SS."
 	InvalidTypeForTimeOnly = "invalid type %T for TimeOnly"

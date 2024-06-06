@@ -25,6 +25,7 @@ const (
 	SrvListenPort                = "SRV_LISTEN_PORT"
 	ChildFiberProcessIdleTimeout = "CHILD_FIBER_PROCESS_IDLE_TIMEOUT"
 	LogDestination               = "LOG_DESTINATION"
+
 	// log constance
 	LogFileName                 = "LOG_FILE_NAME"
 	LogMaxSizeMb                = "LOG_MAX_SIZE_MB"
@@ -34,6 +35,10 @@ const (
 	LogLevel                    = "LOG_LEVEL"
 	LogFormat                   = "LOG_FORMAT"
 	Pprofenabled                = "PPROF_ENABLED"
+
+	// app constance
+	HashingCost = "HASHING_COST"
+
 	// db constance
 	DBHost     = "DB_HOST"
 	DBPort     = "DB_PORT"
@@ -58,12 +63,15 @@ const (
 	LogMaxBackupDaysValue            = 30
 	LogMaxAgeDaysBeforeRolloverValue = 28
 	LogCompressionEnabledValue       = true
+	// app values
+	DefaultHashingCost = 10
 )
 
 type CommonConfig struct {
 	_ struct{}
 	LogConfig
 	DBConfig
+	AppConfig
 	SrvListenPort                string
 	ChildFiberProcessIdleTimeout time.Duration
 	Pprofenabled                 bool
@@ -94,6 +102,11 @@ type DBConfig struct {
 	ISCloudSQL bool
 }
 
+type AppConfig struct {
+	_ 			struct{}
+	HashingCost int
+}
+
 
 // setDefaultConfig is using added application default configurations
 func (config *CommonConfig) setDefaultConfig() {
@@ -116,6 +129,10 @@ func (config *CommonConfig) setDefaultConfig() {
 	// you can supply "console" or "File". if json, logging formant is in json
 	viper.SetDefault(LogFileName, JSON)
 	viper.SetDefault(Pprofenabled, "true")
+}
+
+func (config *CommonConfig) setDefaultAppConfig() {
+	viper.SetDefault(HashingCost, DefaultHashingCost)
 }
 
 func (config *CommonConfig) setDefaultDBConfig() {

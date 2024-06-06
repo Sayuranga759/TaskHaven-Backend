@@ -43,17 +43,6 @@ const (
 	ValidateRoleAssignMethod                  = "ValidateRoleAssign"
 	ValidateRoleRemoveMethod                  = "ValidateRoleRemove"
 	BuildValidationErrorResponseMethod        = "BuildValidationErrorResponse"
-	ValidateClientRegistrationMethod          = "ValidateClientRegistration"
-	ValidateForgetPasswordMethod              = "ValidateForgetPassword"
-	ValidateChangePasswordMethod              = "ValidateChangePassword"
-	ValidateRefreshTokenRequestMethod         = "ValidateRefreshTokenRequest"
-	ValidateTokenFromAuthCodeRequestMethod    = "ValidateTokenFromAuthCodeRequest"
-	ValidateTokenFromCredentialsRequestMethod = "ValidateTokenFromCredentialsRequest"
-	ValidateAuthCodeRequestMethod             = "ValidateAuthCodeRequest"
-	ValidateAddingRedirectionMethod           = "ValidateAddingRedirection"
-	ValidateGetRedirectionInfoMethod          = "ValidateGetRedirectionInfo"
-	ValidateUpdateRedirectionMethod           = "ValidateUpdateRedirection"
-	ValidateSetActiveRedirectionMethod        = "ValidateSetActiveRedirection"
 	ValidateRequestMethod                     = "ValidateRequest"
 )
 
@@ -67,12 +56,8 @@ const (
 
 // constant names
 const (
-	ClientID      = "clientID"
 	UserEmail     = "User Email"
 	RoleName      = "Role Name"
 	refreshToken  = "refresh_token"
 	code          = "code"
-	username      = "username"
-	WorkStartTime = "WorkStartTime"
-	WorkEndTime   = "WorkEndTime"
 )

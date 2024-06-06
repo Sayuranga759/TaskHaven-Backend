@@ -12,4 +12,6 @@ func APIRoutes(app *fiber.App) {
 	// health endpoints
 	route.Get("livez", handler.Lives)
 	route.Get("readyz", handler.Readyz)
+
+	route.Post("/register", handler.UserRegistrationHandler)
 }
