@@ -19,7 +19,6 @@ const (
 	ErrorOccurredWhenUpdating      = "error occurred when updating %s"
 	ErrorOccurredWhenHashing       = "error occurred when hashing"
 	ErrorOccurredWhenHashCompare   = "error occurred when hash compare"
-	ErrOccurredWhenSendingEmail    = "error occurred when sending email"
 	UnexpectedWhenMarshalError     = "Unexpected Error occurred when Marshal the data"
 	UnexpectedPanicErrorOccurred   = "unexpected panic error occurred"
 )
@@ -68,6 +67,7 @@ const (
 	ErrDataUnmarshalCode               = "0038"
 	ErrInvalidGetUserReqCode           = "0039"
 	ErrOccurredWhenParsingReqQueryCode = "0040"
+	ErrOccurredWhenSigningJWTTokenCode  = "0041"
 
 )
 
@@ -107,8 +107,9 @@ const (
 	ErrPasswordChangeRequestExpiredMsg   = "password change request expired"
 	ErrOccurredWhenParsingReqQueryMsg    = "error occurred while parsing the request query"
 	ErrInvalidAuthCodeMsg                = "invalid authorization code"
-		// email error message
-		ErrEmailUniqueConstraintViolationMsg = "Email already exists"
+	ErrOccurredWhenSigningJWTTokenMsg    = "error occurred when signing jwt token"
+	// email error message
+	ErrEmailUniqueConstraintViolationMsg = "Email already exists"
 	// timeonly error message
 	TimeFormatErrorMsg     = "Invalid time format. Time should be in the format HH:MM:SS."
 	InvalidTypeForTimeOnly = "invalid type %T for TimeOnly"

@@ -13,5 +13,8 @@ func APIRoutes(app *fiber.App) {
 	route.Get("livez", handler.Lives)
 	route.Get("readyz", handler.Readyz)
 
-	route.Post("/register", handler.UserRegistrationHandler)
+	// user endpoints
+	user := route.Group("/user")
+	user.Post("/register", handler.UserRegistrationHandler)
+	user.Post("/login", handler.UserLoginHandler)
 }

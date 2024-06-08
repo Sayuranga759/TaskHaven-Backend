@@ -38,6 +38,7 @@ const (
 
 	// app constance
 	HashingCost = "HASHING_COST"
+	JWTSecret   = "JWT_SECRET"
 
 	// db constance
 	DBHost     = "DB_HOST"
@@ -105,6 +106,7 @@ type DBConfig struct {
 type AppConfig struct {
 	_ 			struct{}
 	HashingCost int
+	JWTSecret   string
 }
 
 
@@ -133,6 +135,7 @@ func (config *CommonConfig) setDefaultConfig() {
 
 func (config *CommonConfig) setDefaultAppConfig() {
 	viper.SetDefault(HashingCost, DefaultHashingCost)
+	viper.SetDefault(JWTSecret, "secret")
 }
 
 func (config *CommonConfig) setDefaultDBConfig() {
@@ -149,6 +152,7 @@ func (config *CommonConfig) BuildConfig() *CommonConfig {
 	config.setDefaultConfig()
 
 	// Call the SetDBDefaultConfig function
+	config.setDefaultAppConfig()
 	config.setDefaultDBConfig()
 	viper.AutomaticEnv()
 

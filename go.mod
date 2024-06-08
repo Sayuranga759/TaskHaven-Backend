@@ -51,6 +51,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1
 	github.com/go-playground/validator/v10 v10.21.0
 	github.com/gofiber/fiber/v2 v2.52.4
+	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/lib/pq v1.10.9

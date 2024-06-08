@@ -4,12 +4,10 @@ const (
 	ReadyzServiceMethod = "ReadyzService"
 	// user service methods
 	RegisterUserMethod = "RegisterUser"
+	LoginMethod		   = "Login"
+	// token service methods
+	GenerateTokenMethod = "GenerateToken"
 	// Service bootstrap methods
-	GetClientCredentialsMethod         = "GetClientCredentials"
-	GetPasswordChangeCredentialsMethod = "GetPasswordChangeCredentials"
-	GetUserRoleByUserIDMethod          = "GetUserRoleByUserID"
-	FindRoleIDByUserIDMethod           = "FindRoleIDByUserID"
-	FindRoleByRoleIDMethod             = "FindRoleByRoleID"
 	HandleTransactionMethod            = "HandleTransaction"
 	BeginNewTransactionMethod          = "BeginNewTransaction"
 )

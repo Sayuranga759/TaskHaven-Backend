@@ -11,6 +11,7 @@ import (
 
 type UserRepository interface {
 	AddUser(user *dto.User) (*dto.User, error)
+	GetUserByEmail(email string) (*dto.User, error)
 }
 
 type userRepository struct {
@@ -39,6 +40,21 @@ func (repo *userRepository) AddUser(user *dto.User) (*dto.User, error) {
 		logFields := append(commonLogFields, zap.Any(User, user), zap.Error(err))
 		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenInserting(User), logFields...)
 		return user, err
+	}
+
+	return user, nil
+}
+
+func (repo *userRepository) GetUserByEmail(email string) (*dto.User, error) {
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, repo.repositoryContext.RequestID)}
+	utils.Logger.Debug(utils.TraceMsgFuncStart(GetUserByEmailMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(GetUserByEmailMethod), commonLogFields...)
+
+	var user = &dto.User{}
+	if err := repo.db.Where(&dto.User{Email: email}).First(&user).Error; err != nil {
+		logFields := append(commonLogFields, zap.Any(Email, email), zap.Error(err))
+		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenSelecting(User), logFields...)
+		return nil, err
 	}
 
 	return user, nil

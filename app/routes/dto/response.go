@@ -5,3 +5,8 @@ type UserRegistrationResponse struct {
 	Email  string	`json:"Email"`
 	Name   string 	`json:"Name"`
 }
+
+type LoginResponse struct {
+	UserID       uint 	`json:"UserID"`
+	AccessToken  string `json:"AccessToken"`
+}

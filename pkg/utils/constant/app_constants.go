@@ -1,7 +1,8 @@
 package constant
 
 const (
-	DatadogTracingSink = "datadog"
+	Issuer 				= "TaskHaven"
+	DatadogTracingSink 	= "datadog"
 )
 
 // special charactes
@@ -20,9 +21,10 @@ const (
 )
 
 const (
-	IntOne   int = 1
-	IntTwo   int = 2
-	IntThree int = 3
+	IntOne   		int = 1
+	IntTwo   		int = 2
+	IntThree 		int = 3
+	IntTwentyFour 	int = 24
 )
 
 // file constant
@@ -41,6 +43,12 @@ const (
 	Access  = "access"
 	Refresh = "refresh"
 	Code    = "code"
+)
+
+// cookie const
+const (
+	CookieName = "jwt"
+	CookiePath = "/"
 )
 
 // Logger Message

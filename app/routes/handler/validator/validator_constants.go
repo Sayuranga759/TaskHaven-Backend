@@ -40,8 +40,7 @@ const (
 // Methods
 const (
 	ValidateUserRegistrationMethod            = "ValidateUserRegistration"
-	ValidateRoleAssignMethod                  = "ValidateRoleAssign"
-	ValidateRoleRemoveMethod                  = "ValidateRoleRemove"
+	ValidateLoginMethod					      = "ValidateLogin"
 	BuildValidationErrorResponseMethod        = "BuildValidationErrorResponse"
 	ValidateRequestMethod                     = "ValidateRequest"
 )

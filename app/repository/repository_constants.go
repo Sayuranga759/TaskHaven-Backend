@@ -1,8 +1,13 @@
 package repository
 
 const (
+	Email = "email"
+)
+
+const (
 	// User repository methods
-	AddUserMethod = "AddUser"
+	AddUserMethod 			= "AddUser"
+	GetUserByEmailMethod 	= "GetUserByEmail"
 )
 
 // Table names
