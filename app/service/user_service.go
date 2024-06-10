@@ -88,7 +88,7 @@ func (service UserService) RegisterUser(request dto.UserRegistrationRequest) (re
 	}
 
 	response = &dto.UserRegistrationResponse{
-		UserID: addedUser.ID,
+		UserID: addedUser.UserID,
 		Name: addedUser.Name,
 		Email: addedUser.Email,
 	}
@@ -140,7 +140,7 @@ func (service UserService) Login(request dto.LoginRequest, ctx *fiber.Ctx) (resp
 
 	response = &dto.LoginResponse{
 		AccessToken: *accessToken,
-		UserID: user.ID,
+		UserID: user.UserID,
 	}
 
 	return response, nil
@@ -154,7 +154,7 @@ func (service UserService) generateToken(user dto.User) (accessToken *string, er
 	claims := dto.JWTClaims{
 		Name : user.Name,
 		Email: user.Email,
-		UserID: user.ID,
+		UserID: user.UserID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(constant.IntOne))),
 			Issuer: constant.Issuer,
@@ -172,6 +172,7 @@ func (service UserService) generateToken(user dto.User) (accessToken *string, er
 
 	return &tokenString, nil
 }
+
 
 
 

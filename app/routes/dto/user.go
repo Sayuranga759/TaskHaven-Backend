@@ -4,6 +4,7 @@ import "github.com/golang-jwt/jwt/v4"
 
 type User struct {
 	*Base
+	UserID   uint   `gorm:"not null; column:user_id; primaryKey; autoIncrement;"`
 	Name     string `gorm:"not null; column:name"`
 	Email    string `gorm:"not null; column:email; unique"`
 	Password string `gorm:"not null; column:password"`

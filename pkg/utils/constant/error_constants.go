@@ -51,6 +51,7 @@ const (
 	ErrInvalidAuthHeaderCode              = "0017"
 	ErrInvalidUserCredentialsCode         = "0019"
 	ErrInvalidAuthCodeCode                = "0021"
+	ErrCookieNotFoundCode				  = "0025"
 	// db error codes
 	ErrRecordNotFoundCode   = "0022"
 	ErrDatabaseCode         = "0023"
@@ -68,7 +69,7 @@ const (
 	ErrInvalidGetUserReqCode           = "0039"
 	ErrOccurredWhenParsingReqQueryCode = "0040"
 	ErrOccurredWhenSigningJWTTokenCode  = "0041"
-
+	ErrInvalidTokenCode               = "0042"
 )
 
 const (
@@ -92,6 +93,8 @@ const (
 	ErrorOccurredWhenPassingEmptyKeyMsg  = "error occurred when passing empty private key"
 	ErrInvalidClientCredentialsMsg       = "invalid Client Credentials"
 	ErrInvalidTokenSignatureMsg          = "invalid Token Signature"
+	ErrInvalidTokenMsg				   	 = "invalid token"
+	ErrInvalidTokenClaimsMsg             = "invalid token claims"
 	ErrOccurredWhenAccessingTokenMsg     = "error Occurred when accessing token"
 	ErrEmptyAuthHeaderMsg                = "authorization header is required"
 	ErrEmptyAuthKeyHeaderMsg             = "key header is required"
@@ -108,6 +111,7 @@ const (
 	ErrOccurredWhenParsingReqQueryMsg    = "error occurred while parsing the request query"
 	ErrInvalidAuthCodeMsg                = "invalid authorization code"
 	ErrOccurredWhenSigningJWTTokenMsg    = "error occurred when signing jwt token"
+	ErrCookieNotFoundMsg				 = "cookie not found"
 	// email error message
 	ErrEmailUniqueConstraintViolationMsg = "Email already exists"
 	// timeonly error message
