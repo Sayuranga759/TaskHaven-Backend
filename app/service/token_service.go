@@ -1,7 +1,8 @@
-package helper
+package service
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/dto"
 	"github.com/Sayuranga759/TaskHaven-Backend/pkg/config"
@@ -12,8 +13,19 @@ import (
 	"go.uber.org/zap"
 )
 
-func ValidateToken(requestID string, request dto.ValidateTokenRequest) (response *dto.JWTClaims, errResult *custom.ErrorResult) {
-	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
+type TokenService struct {
+	_              struct{}
+	ServiceContext ServiceContext
+}
+
+func CreateTokenSerivce(requestID string) *TokenService {
+	return &TokenService{
+		ServiceContext: CreateServiceContext(requestID),
+	}
+}
+
+func (service TokenService) ValidateToken(request dto.ValidateTokenRequest) (response *dto.JWTClaims, errResult *custom.ErrorResult) {
+	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
 	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateTokenMethod), commonLogFields...)
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateTokenMethod), commonLogFields...)
 
@@ -24,13 +36,13 @@ func ValidateToken(requestID string, request dto.ValidateTokenRequest) (response
 		return nil, &errResult
 	}
 
-	token, errResult := validateTokenSignature(requestID, request.Cookie, config.GetConfig().JWTSecret)
+	token, errResult := service.validateTokenSignature(request.Cookie, config.GetConfig().JWTSecret)
 	if errResult != nil {
 		utils.Logger.Error(constant.ErrInvalidTokenSignatureMsg, commonLogFields...)
 		return nil, errResult
 	}
 
-	jwtClaims, errResult := extractClaimsFromToken(requestID, token)
+	jwtClaims, errResult := service.extractClaimsFromToken(token)
 	if errResult != nil {
 		utils.Logger.Error(constant.ErrInvalidTokenClaimsMsg, commonLogFields...)
 		return nil, errResult
@@ -39,8 +51,35 @@ func ValidateToken(requestID string, request dto.ValidateTokenRequest) (response
 	return jwtClaims, nil
 }
 
-func validateTokenSignature(requestID, tokenString, secretKey string) (*jwt.Token, *custom.ErrorResult) {
-	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
+func (service TokenService) generateToken(user dto.User) (accessToken *string, errResult *custom.ErrorResult) {
+	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
+	utils.Logger.Debug(utils.TraceMsgFuncStart(GenerateTokenMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(GenerateTokenMethod), commonLogFields...)
+
+	claims := dto.JWTClaims{
+		Name:   user.Name,
+		Email:  user.Email,
+		UserID: user.UserID,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(constant.IntOne))),
+			Issuer:    constant.Issuer,
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString([]byte(config.GetConfig().JWTSecret))
+	if err != nil {
+		utils.Logger.Error(constant.ErrOccurredWhenSigningJWTTokenMsg, utils.TraceError(commonLogFields, err)...)
+		errRes := custom.BuildInternalServerErrResult(constant.ErrOccurredWhenSigningJWTTokenCode, constant.ErrOccurredWhenSigningJWTTokenMsg, err.Error())
+
+		return nil, &errRes
+	}
+
+	return &tokenString, nil
+}
+
+func (service TokenService) validateTokenSignature(tokenString, secretKey string) (*jwt.Token, *custom.ErrorResult) {
+	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
 	utils.Logger.Debug(utils.TraceMsgFuncStart(validateTokenSignatureMethod), commonLogFields...)
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(validateTokenSignatureMethod), commonLogFields...)
 
@@ -63,8 +102,8 @@ func validateTokenSignature(requestID, tokenString, secretKey string) (*jwt.Toke
 	return token, nil
 }
 
-func extractClaimsFromToken(requestID string, token *jwt.Token) (*dto.JWTClaims, *custom.ErrorResult) {
-	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
+func (service TokenService) extractClaimsFromToken(token *jwt.Token) (*dto.JWTClaims, *custom.ErrorResult) {
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, service.ServiceContext.RequestID)}
 	utils.Logger.Debug(utils.TraceMsgFuncStart(extractClaimsFromTokenMethod), commonLogFields...)
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(extractClaimsFromTokenMethod), commonLogFields...)
 

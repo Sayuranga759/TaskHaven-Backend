@@ -1,12 +1,22 @@
 package service
 
+// Token claims
+const (
+	UserID 			= "UserID"
+	Email 			= "Email"
+	Name 			= "Name"
+)
+
 const (
 	ReadyzServiceMethod = "ReadyzService"
 	// user service methods
 	RegisterUserMethod = "RegisterUser"
 	LoginMethod		   = "Login"
 	// token service methods
-	GenerateTokenMethod = "GenerateToken"
+	GenerateTokenMethod 			= "GenerateToken"
+	ValidateTokenMethod 			= "ValidateToken"
+	validateTokenSignatureMethod 	= "validateTokenSignature"
+	extractClaimsFromTokenMethod 	= "extractClaimsFromToken"
 	// Service bootstrap methods
 	HandleTransactionMethod            = "HandleTransaction"
 	BeginNewTransactionMethod          = "BeginNewTransaction"

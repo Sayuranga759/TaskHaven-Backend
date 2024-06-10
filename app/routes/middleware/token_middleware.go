@@ -1,11 +1,9 @@
 package middleware
 
 import (
-	"fmt"
-
 	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/dto"
 	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/handler"
-	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/handler/helper"
+	"github.com/Sayuranga759/TaskHaven-Backend/app/service"
 	"github.com/Sayuranga759/TaskHaven-Backend/pkg/custom"
 	"github.com/Sayuranga759/TaskHaven-Backend/pkg/utils"
 	"github.com/Sayuranga759/TaskHaven-Backend/pkg/utils/constant"
@@ -24,6 +22,7 @@ func TokenValidateMiddleware(ctx *fiber.Ctx) error {
 	var (
 		errRes       *custom.ErrorResult
 		response     *dto.JWTClaims
+		tokenService = service.CreateTokenSerivce(requestID)
 	)
 
 	cookie := ctx.Cookies(constant.CookieName)
@@ -32,10 +31,10 @@ func TokenValidateMiddleware(ctx *fiber.Ctx) error {
 		Cookie: cookie,
 	}
 
-	response, errRes = helper.ValidateToken(requestID, request)
+	response, errRes = tokenService.ValidateToken(request)
 	if errRes != nil {
 		logFields := append(commonLogFields, zap.Any(constant.ErrorNote, errRes))
-		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(helper.ValidateTokenMethod), logFields...)
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(service.ValidateTokenMethod), logFields...)
 
 		statusCode, errRes := handler.HandleError(errRes)
 
@@ -51,6 +50,5 @@ func TokenValidateMiddleware(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Locals(tokenClaims, response)
-	fmt.Println("Token claims: ", response)
 	return ctx.Next()
 }

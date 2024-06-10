@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"runtime/debug"
-	"time"
 
 	"github.com/Sayuranga759/TaskHaven-Backend/app/repository"
 	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/dto"
@@ -12,7 +11,6 @@ import (
 	"github.com/Sayuranga759/TaskHaven-Backend/pkg/utils"
 	"github.com/Sayuranga759/TaskHaven-Backend/pkg/utils/constant"
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
@@ -21,6 +19,7 @@ type UserService struct {
 	_ struct{}
 	ServiceContext ServiceContext
 	transaction    *gorm.DB
+	tokenService   *TokenService
 	userRepo 	   repository.UserRepository
 }
 
@@ -110,6 +109,7 @@ func (service UserService) Login(request dto.LoginRequest, ctx *fiber.Ctx) (resp
 		utils.Logger.Debug(utils.TraceMsgFuncEnd(LoginMethod), commonLogFields...)
 	}()
 
+	service.tokenService = CreateTokenSerivce(service.ServiceContext.RequestID)
 	service.userRepo = repository.CreateUserRepository(service.ServiceContext.RequestID, nil)
 
 	user, err := service.userRepo.GetUserByEmail(request.Email)
@@ -130,7 +130,7 @@ func (service UserService) Login(request dto.LoginRequest, ctx *fiber.Ctx) (resp
 		return nil, &errRes
 	}
 
-	accessToken, errRes := service.generateToken(*user)
+	accessToken, errRes := service.tokenService.generateToken(*user)
 	if errRes != nil {
 		logFields := utils.TraceCustomError(commonLogFields, *errRes)
 		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(GenerateTokenMethod), logFields...)
@@ -144,33 +144,6 @@ func (service UserService) Login(request dto.LoginRequest, ctx *fiber.Ctx) (resp
 	}
 
 	return response, nil
-}
-
-func (service UserService) generateToken(user dto.User) (accessToken *string, errResult *custom.ErrorResult ) {
-	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
-	utils.Logger.Debug(utils.TraceMsgFuncStart(GenerateTokenMethod), commonLogFields...)
-	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(GenerateTokenMethod), commonLogFields...)
-
-	claims := dto.JWTClaims{
-		Name : user.Name,
-		Email: user.Email,
-		UserID: user.UserID,
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(constant.IntOne))),
-			Issuer: constant.Issuer,
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(config.GetConfig().JWTSecret))
-	if err != nil {
-		utils.Logger.Error(constant.ErrOccurredWhenSigningJWTTokenMsg, utils.TraceError(commonLogFields, err)...)
-		errRes := custom.BuildInternalServerErrResult(constant.ErrOccurredWhenSigningJWTTokenCode, constant.ErrOccurredWhenSigningJWTTokenMsg, err.Error())
-
-		return nil, &errRes
-	}
-
-	return &tokenString, nil
 }
 
 
