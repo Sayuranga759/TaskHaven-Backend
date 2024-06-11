@@ -45,6 +45,9 @@ func RegisterCustomValidation(validate *validator.Validate) {
 		return containsOnly(fl.Field().String(), alphaNumericWithHyphenRegex)
 	})
 
+	validate.RegisterValidation(password, func(fl validator.FieldLevel) bool {
+		return validatePassword(fl.Field().String(), passwordRegexes)
+	})
 }
 
 // RegisterCustomTranslation use add custom validator translation
@@ -88,6 +91,13 @@ func RegisterCustomTranslation(validate *validator.Validate, trans ut.Translator
 		return ut.Add(timeonly, "{0} must be a valid time in the format 'HH:MM:SS'", true)
 	}, func(ut ut.Translator, fe validator.FieldError) string {
 		t, _ := ut.T(timeonly, fe.Field())
+		return t
+	})
+
+	validate.RegisterTranslation(password, trans, func(ut ut.Translator) error {
+		return ut.Add(password, "{0} must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character", true)
+	}, func(ut ut.Translator, fe validator.FieldError) string {
+		t, _ := ut.T(password, fe.Field())
 		return t
 	})
 }

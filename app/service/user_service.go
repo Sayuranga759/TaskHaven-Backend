@@ -81,15 +81,15 @@ func (service UserService) RegisterUser(request dto.UserRegistrationRequest) (re
 			}
 		}
 		utils.Logger.Error(utils.TraceMsgErrorOccurredWhen(repository.AddUserMethod), utils.TraceError(commonLogFields, err)...)
-		errRes := buildDBError(repository.User, err)
+		errRes := buildDBError(repository.Users, err)
 
 		return nil, errRes
 	}
 
-	response = &dto.UserRegistrationResponse{
-		UserID: addedUser.UserID,
-		Name: addedUser.Name,
-		Email: addedUser.Email,
+	response, errResult = utils.StructCaster[dto.UserRegistrationResponse](commonLogFields, addedUser)
+	if errResult != nil {
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(constant.StructCasterMethod), utils.TraceCustomError(commonLogFields, *errResult)...)
+		return nil, errResult
 	}
 
 	return response, nil

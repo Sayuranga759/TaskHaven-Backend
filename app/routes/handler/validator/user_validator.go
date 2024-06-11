@@ -50,8 +50,6 @@ func ValidateLogin(requestID string, ctx *fiber.Ctx) (dto.LoginRequest, *custom.
 		err    	error
 	)
 
-	ctx.Request().SetBody([]byte(body))
-
 	err = ctx.BodyParser(&request)
 	if err != nil {
 		utils.Logger.Error(constant.InvalidInputAndPassErr, append(commonLogFields, []zap.Field{zap.String(constant.ErrorRequestBody, body), zap.Error(err)}...)...)

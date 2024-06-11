@@ -37,8 +37,8 @@ func (repo *userRepository) AddUser(user *dto.Users) (*dto.Users, error) {
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(AddUserMethod), commonLogFields...)
 
 	if err := repo.getTransaction().Create(user).Error; err != nil {
-		logFields := append(commonLogFields, zap.Any(User, user), zap.Error(err))
-		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenInserting(User), logFields...)
+		logFields := append(commonLogFields, zap.Any(Users, user), zap.Error(err))
+		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenInserting(Users), logFields...)
 		return user, err
 	}
 
@@ -53,7 +53,7 @@ func (repo *userRepository) GetUserByEmail(email string) (*dto.Users, error) {
 	var user = &dto.Users{}
 	if err := repo.db.Where(&dto.Users{Email: email}).First(&user).Error; err != nil {
 		logFields := append(commonLogFields, zap.Any(Email, email), zap.Error(err))
-		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenSelecting(User), logFields...)
+		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenSelecting(Users), logFields...)
 		return nil, err
 	}
 

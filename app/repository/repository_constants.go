@@ -8,9 +8,12 @@ const (
 	// User repository methods
 	AddUserMethod 			= "AddUser"
 	GetUserByEmailMethod 	= "GetUserByEmail"
+	// Task repository methods
+	AddTaskMethod 			= "AddTask"
 )
 
 // Table names
 const (
-	User = "user"
+	Users = "users"
+	Tasks = "tasks"
 )

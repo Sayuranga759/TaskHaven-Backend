@@ -17,4 +17,24 @@ func validateEmail(field string) bool {
 	return err == nil
 }
 
+// Validate the password is valid as expected
+func validatePassword(field string, regexes []string) bool {
+	for _,regex := range regexes {
+		reg, _ := regexp.Compile(regex)
+		if !reg.MatchString(field) {
+			return false
+		}
+	}
+
+	return true
+}
+
+
+
+
+
+
+
+
+
 
