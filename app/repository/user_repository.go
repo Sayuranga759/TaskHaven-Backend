@@ -10,8 +10,8 @@ import (
 )
 
 type UserRepository interface {
-	AddUser(user *dto.User) (*dto.User, error)
-	GetUserByEmail(email string) (*dto.User, error)
+	AddUser(user *dto.Users) (*dto.Users, error)
+	GetUserByEmail(email string) (*dto.Users, error)
 }
 
 type userRepository struct {
@@ -31,7 +31,7 @@ func (repo *userRepository) getTransaction() *gorm.DB {
 	return repo.repositoryContext.Transaction
 }
 
-func (repo *userRepository) AddUser(user *dto.User) (*dto.User, error) {
+func (repo *userRepository) AddUser(user *dto.Users) (*dto.Users, error) {
 	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, repo.repositoryContext.RequestID)}
 	utils.Logger.Debug(utils.TraceMsgFuncStart(AddUserMethod), commonLogFields...)
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(AddUserMethod), commonLogFields...)
@@ -45,13 +45,13 @@ func (repo *userRepository) AddUser(user *dto.User) (*dto.User, error) {
 	return user, nil
 }
 
-func (repo *userRepository) GetUserByEmail(email string) (*dto.User, error) {
+func (repo *userRepository) GetUserByEmail(email string) (*dto.Users, error) {
 	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, repo.repositoryContext.RequestID)}
 	utils.Logger.Debug(utils.TraceMsgFuncStart(GetUserByEmailMethod), commonLogFields...)
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(GetUserByEmailMethod), commonLogFields...)
 
-	var user = &dto.User{}
-	if err := repo.db.Where(&dto.User{Email: email}).First(&user).Error; err != nil {
+	var user = &dto.Users{}
+	if err := repo.db.Where(&dto.Users{Email: email}).First(&user).Error; err != nil {
 		logFields := append(commonLogFields, zap.Any(Email, email), zap.Error(err))
 		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenSelecting(User), logFields...)
 		return nil, err

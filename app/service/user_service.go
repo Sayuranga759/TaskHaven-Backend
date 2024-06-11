@@ -62,7 +62,7 @@ func (service UserService) RegisterUser(request dto.UserRegistrationRequest) (re
 		return nil, &errRes
 	}
 
-	user := dto.User{
+	user := dto.Users{
 		Name:    request.Name,
 		Email:   request.Email,
 		Password: *hashedPassword,

@@ -17,7 +17,7 @@ func init() {
 	config.InitConfig()
 
 	err := dbconfig.InitDBConWithAutoMigrate(
-		&dto.User{}, &dto.Priority{}, &dto.Task{}, &dto.Tags{}, &dto.TaskTags{},
+		&dto.Users{}, &dto.Priorities{}, &dto.Tasks{}, &dto.Tags{}, &dto.TaskTags{},
 	)
 	if err != nil {
 		utils.Logger.Error(constant.DBInitFailError, zap.Error(err))

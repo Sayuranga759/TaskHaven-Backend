@@ -51,7 +51,7 @@ func (service TokenService) ValidateToken(request dto.ValidateTokenRequest) (res
 	return jwtClaims, nil
 }
 
-func (service TokenService) generateToken(user dto.User) (accessToken *string, errResult *custom.ErrorResult) {
+func (service TokenService) generateToken(user dto.Users) (accessToken *string, errResult *custom.ErrorResult) {
 	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
 	utils.Logger.Debug(utils.TraceMsgFuncStart(GenerateTokenMethod), commonLogFields...)
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(GenerateTokenMethod), commonLogFields...)
