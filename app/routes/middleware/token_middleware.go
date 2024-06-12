@@ -49,6 +49,6 @@ func TokenValidateMiddleware(ctx *fiber.Ctx) error {
 		return nil
 	}
 
-	ctx.Locals(tokenClaims, response)
+	ctx.Locals(TokenClaims, response)
 	return ctx.Next()
 }

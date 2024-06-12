@@ -13,6 +13,8 @@ const (
 	timestampRegex                           = `^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])Z`
 )
 
+var passwordRegexes = []string{`[a-z]`,`[A-Z]`,`\d`,`[@$!%*?&]`,`.{8,}`}
+
 // Validator keys
 const (
 	alphaNumeric                = "alphaNumeric"
@@ -39,8 +41,14 @@ const (
 
 // Methods
 const (
+	// User validator methods
 	ValidateUserRegistrationMethod            = "ValidateUserRegistration"
 	ValidateLoginMethod					      = "ValidateLogin"
+	// Task validator methods
+	ValidateCreateTaskMethod		= "ValidateCreateTask"
+	ValidateUpdateTaskMethod		= "ValidateUpdateTask"
+	ValidateDeleteTaskMethod		= "ValidateDeleteTask"
+	//
 	BuildValidationErrorResponseMethod        = "BuildValidationErrorResponse"
 	ValidateRequestMethod                     = "ValidateRequest"
 )
@@ -56,7 +64,4 @@ const (
 // constant names
 const (
 	UserEmail     = "User Email"
-	RoleName      = "Role Name"
-	refreshToken  = "refresh_token"
-	code          = "code"
 )

@@ -9,18 +9,16 @@ import (
 	"go.uber.org/zap"
 )
 
-func ValidateUserRegistration(requestID string, ctx *fiber.Ctx) (dto.UserRegistrationRequest, *custom.ErrorResult) {
+func ValidateCreateTask(requestID string, ctx *fiber.Ctx) (dto.CreateTaskRequest, *custom.ErrorResult) {
 	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
-	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateUserRegistrationMethod), commonLogFields...)
-	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateUserRegistrationMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateCreateTaskMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateCreateTaskMethod), commonLogFields...)
 
 	var (
-		request dto.UserRegistrationRequest
+		request dto.CreateTaskRequest
 		body   	= string(ctx.Body())
-		err    	error
+		err   	error
 	)
-
-	ctx.Request().SetBody([]byte(body))
 
 	err = ctx.BodyParser(&request)
 	if err != nil {
@@ -39,15 +37,44 @@ func ValidateUserRegistration(requestID string, ctx *fiber.Ctx) (dto.UserRegistr
 	return request, nil
 }
 
-func ValidateLogin(requestID string, ctx *fiber.Ctx) (dto.LoginRequest, *custom.ErrorResult) {
+func ValidateUpdateTask(requestID string, ctx *fiber.Ctx) (dto.UpdateTaskRequest, *custom.ErrorResult) {
 	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
-	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateLoginMethod), commonLogFields...)
-	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateLoginMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateUpdateTaskMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateUpdateTaskMethod), commonLogFields...)
 
 	var (
-		request dto.LoginRequest
+		request dto.UpdateTaskRequest
 		body   	= string(ctx.Body())
-		err    	error
+		err   	error
+	)
+
+	err = ctx.BodyParser(&request)
+	if err != nil {
+		utils.Logger.Error(constant.InvalidInputAndPassErr, append(commonLogFields, []zap.Field{zap.String(constant.ErrorRequestBody, body), zap.Error(err)}...)...)
+		errorResult := custom.BuildBadReqErrResult(constant.BindingErrorCode, constant.InvalidRequestErrorMessage, err.Error())
+		
+		return request, &errorResult
+	}
+
+	errRes := ValidateRequest(requestID, request)
+	if errRes != nil {
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(ValidateRequestMethod), append(commonLogFields, zap.Any(constant.ErrorNote, errRes))...)
+		return request, errRes
+	}
+
+	return request, nil
+
+}
+
+func ValidateDeleteTask(requestID string, ctx *fiber.Ctx) (dto.DeleteTaskRequest, *custom.ErrorResult) {
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
+	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateDeleteTaskMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateDeleteTaskMethod), commonLogFields...)
+
+	var (
+		request dto.DeleteTaskRequest
+		body   	= string(ctx.Body())
+		err   	error
 	)
 
 	err = ctx.BodyParser(&request)

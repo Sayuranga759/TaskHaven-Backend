@@ -17,6 +17,12 @@ const (
 	ValidateTokenMethod 			= "ValidateToken"
 	validateTokenSignatureMethod 	= "validateTokenSignature"
 	extractClaimsFromTokenMethod 	= "extractClaimsFromToken"
+	// task service methods
+	CreateTaskMethod 		 = "CreateTask"
+	UpdateTaskMethod 		 = "UpdateTask"
+	DeleteTaskMethod 		 = "DeleteTask"
+	GetTaskListMethod 		 = "GetTaskList"
+	isTaskExistforUserMethod = "isTaskExistforUser"
 	// Service bootstrap methods
 	HandleTransactionMethod            = "HandleTransaction"
 	BeginNewTransactionMethod          = "BeginNewTransaction"

@@ -26,7 +26,7 @@ type Tasks struct {
 	PriorityID  uint   		`gorm:"not null; column:priority_id"` // Foreign key
 	Title       string 		`gorm:"not null; column:title"`
 	Description string 		`gorm:"column:description"`
-	Status      string 		`gorm:"not null; column:status"`
+	Status      Status 		`gorm:"not null; column:status; type:status"`
 	DueDate     time.Time 	`gorm:"not null; column:due_date"`
 	Tags        []Tags 		`gorm:"many2many:task_tags;"`
 }
@@ -34,9 +34,9 @@ type Tasks struct {
 //  many2many mapping with Tasks
 type Tags struct {
 	*Base
-	TagID    uint  		`gorm:"not null; column:tag_id; primaryKey; autoIncrement;"`
-	TagName string 		`gorm:"not null; column:tag_name"`
-	Tasks    []Tasks 	`gorm:"many2many:task_tags;"`
+	TagID    	uint  		`gorm:"not null; column:tag_id; primaryKey; autoIncrement;"`
+	TagName 	string 		`gorm:"not null; column:tag_name"`
+	Tasks    	[]Tasks 	`gorm:"many2many:task_tags;"`
 }
 
 // join table for many2many relationship between Tasks and Tags
@@ -49,7 +49,7 @@ type TaskTags struct {
 // 1:many mapping with Tasks
 type Priorities struct {
 	*Base
-	PriorityID   	uint   	`gorm:"not null; column:priority_id; primaryKey; autoIncrement;"`
-	PriorityLevel 	string 	`gorm:"not null; column:priority_level"`
-	Tasks		 	[]Tasks `gorm:"foreignKey:PriorityID"`
+	PriorityID   	uint   			`gorm:"not null; column:priority_id; primaryKey; autoIncrement;"`
+	PriorityLevel 	PriorityLevel 	`gorm:"not null; column:priority_level; type:priority_level"`
+	Tasks		 	[]Tasks 		`gorm:"foreignKey:PriorityID"`
 }
