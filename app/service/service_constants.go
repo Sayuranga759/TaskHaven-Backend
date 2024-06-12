@@ -20,6 +20,7 @@ const (
 	// task service methods
 	CreateTaskMethod 		 = "CreateTask"
 	UpdateTaskMethod 		 = "UpdateTask"
+	DeleteTaskMethod 		 = "DeleteTask"
 	isTaskExistforUserMethod = "isTaskExistforUser"
 	// Service bootstrap methods
 	HandleTransactionMethod            = "HandleTransaction"

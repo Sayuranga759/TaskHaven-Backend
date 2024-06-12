@@ -12,6 +12,7 @@ import (
 type TaskRepository interface {
 	AddTask(task *dto.Tasks) (*dto.Tasks, error)
 	UpdateTask(task *dto.Tasks) (*dto.Tasks, error)
+	DeleteTask(taskID uint) (*dto.Tasks, error)
 	IsTaskExistforUser(taskID, userID uint) (bool, error)
 }
 
@@ -73,6 +74,21 @@ func (repo *taskRepository) IsTaskExistforUser(taskID, userID uint) (bool, error
 	}
 
 	return count > 0, nil
+}
+
+func (repo *taskRepository) DeleteTask(taskID uint) (*dto.Tasks, error) {
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, repo.repositoryContext.RequestID)}
+	utils.Logger.Debug(utils.TraceMsgFuncStart(DeleteTaskMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(DeleteTaskMethod), commonLogFields...)
+
+	task := &dto.Tasks{TaskID: taskID}
+	if err := repo.getTransaction().Delete(task).Error; err != nil {
+		logFields := append(commonLogFields, zap.Uint(TaskID, taskID), zap.Error(err))
+		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenDeleting(Tasks), logFields...)
+		return task, err
+	}
+
+	return task, nil
 }
 
 

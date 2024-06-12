@@ -141,6 +141,59 @@ func (service TaskService) UpdateTask(request dto.ManageTaskRequest) (response *
 	return response, nil
 }
 
+func (service TaskService) DeleteTask(request dto.DeleteTaskRequest) (response *dto.ManageTaskResponse, errResult *custom.ErrorResult) {
+	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
+	utils.Logger.Debug(utils.TraceMsgFuncStart(DeleteTaskMethod), commonLogFields...)
+
+	defer func() {
+		// Panic handling
+		if r := recover(); r != nil {
+			utils.Logger.Error(constant.PanicOccurred, utils.TraceStack(commonLogFields, debug.Stack())...)
+			errResult = buildPanicErr(DeleteTaskMethod)
+		}
+
+		errResult = handleTransaction(commonLogFields, service.transaction, errResult, DeleteTaskMethod)
+		if errResult != nil {
+			utils.Logger.Error(utils.TraceMsgErrorOccurredWhen(HandleTransactionMethod), utils.TraceCustomError(commonLogFields, *errResult)...)
+		}
+
+		utils.Logger.Debug(utils.TraceMsgFuncEnd(DeleteTaskMethod), commonLogFields...)
+	}()
+
+	service.transaction, errResult = BeginNewTransaction()
+	if errResult != nil {
+		utils.Logger.Error(utils.TraceMsgErrorOccurredWhen(BeginNewTransactionMethod), utils.TraceCustomError(commonLogFields, *errResult)...)
+
+		return nil, errResult
+	}
+
+	service.taskRepo = repository.CreateTaskRepository(service.ServiceContext.RequestID, service.transaction)
+
+	errRes := service.isTaskExistForUser(request.UserID, request.TaskID)
+	if errRes != nil {
+		logFields := append(commonLogFields, zap.Any(constant.ErrorNote, errRes))
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(DeleteTaskMethod), logFields...)
+
+		return nil, errRes
+	}
+
+	deletedTask, err := service.taskRepo.DeleteTask(request.TaskID)
+	if err != nil {
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(DeleteTaskMethod), append(commonLogFields, zap.Any(constant.ErrorNote, err))...)
+		errRes := custom.BuildInternalServerErrResult(constant.ErrDatabaseCode, constant.ErrDatabaseMsg, err.Error())
+
+		return nil, &errRes
+	}
+
+	response, errResult = utils.StructCaster[dto.ManageTaskResponse](commonLogFields, deletedTask)
+	if errResult != nil {
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(constant.StructCasterMethod), utils.TraceCustomError(commonLogFields, *errResult)...)
+		return nil, errResult
+	}
+
+	return nil, nil
+}
+
 func (service TaskService) isTaskExistForUser(userID, taskID uint) (errResult *custom.ErrorResult) {
 	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
 	utils.Logger.Debug(utils.TraceMsgFuncStart(isTaskExistforUserMethod), commonLogFields...)

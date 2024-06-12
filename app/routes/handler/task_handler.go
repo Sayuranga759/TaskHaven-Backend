@@ -30,9 +30,9 @@ func CreateTaskHandler(ctx *fiber.Ctx) error {
 	)
 
 	// validate
-	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateTaskMethod), commonLogFields...)
-	request, errorResult = validator.ValidateTask(requestID, ctx)
-	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateTaskMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateTaskDataMethod), commonLogFields...)
+	request, errorResult = validator.ValidateTaskData(requestID, ctx)
+	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateTaskDataMethod), commonLogFields...)
 
 	request.UserID = ctx.Locals(TokenClaims).(*dto.JWTClaims).UserID
 
@@ -77,9 +77,9 @@ func UpdateTaskHandler(ctx *fiber.Ctx) error {
 	)
 
 	// validate
-	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateTaskMethod), commonLogFields...)
-	request, errorResult = validator.ValidateTask(requestID, ctx)
-	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateTaskMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateTaskDataMethod), commonLogFields...)
+	request, errorResult = validator.ValidateTaskData(requestID, ctx)
+	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateTaskDataMethod), commonLogFields...)
 
 	request.UserID = ctx.Locals(TokenClaims).(*dto.JWTClaims).UserID
 
@@ -90,6 +90,53 @@ func UpdateTaskHandler(ctx *fiber.Ctx) error {
 	if errorResult != nil {
 		logFields := append(commonLogFields, zap.Any(constant.ErrorNote, errorResult))
 		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(service.UpdateTaskMethod), logFields...)
+
+		statusCode, errRes = HandleError(errorResult)
+	}
+
+	// Build the response
+	responseBuilder := responsebuilder.APIResponse{
+		Ctx:          	ctx,
+		HTTPStatus:   	statusCode,
+		ErrorResponse: 	errRes,
+		Response:     	response,
+		RequestID:    	requestID,
+	}
+	responseBuilder.BuildAPIResponse()
+
+	return nil
+}
+
+func DeleteTaskHandler(ctx *fiber.Ctx) error {
+	var requestID = web.GetRequestID(ctx)
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
+	utils.Logger.Info(utils.TraceMsgFuncStart(DeleteTaskHandlerMethod), commonLogFields...)
+
+	defer utils.Logger.Info(utils.TraceMsgFuncEnd(DeleteTaskHandlerMethod), commonLogFields...)
+
+	var (
+		statusCode  int
+		errorResult *custom.ErrorResult
+		errRes      custom.ErrorResult
+		request	 	dto.DeleteTaskRequest
+		response    *dto.ManageTaskResponse
+		taskService = service.CreateTaskSerivce(requestID)
+	)
+
+	// validate
+	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateDeleteTaskMethod), commonLogFields...)
+	request, errorResult = validator.ValidateDeleteTask(requestID, ctx)
+	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateDeleteTaskMethod), commonLogFields...)
+
+	request.UserID = ctx.Locals(TokenClaims).(*dto.JWTClaims).UserID
+
+	if errorResult == nil {
+		response, errorResult = taskService.DeleteTask(request)
+	}
+
+	if errorResult != nil {
+		logFields := append(commonLogFields, zap.Any(constant.ErrorNote, errorResult))
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(service.DeleteTaskMethod), logFields...)
 
 		statusCode, errRes = HandleError(errorResult)
 	}

@@ -22,4 +22,5 @@ func APIRoutes(app *fiber.App) {
 	task := route.Group("/task", middleware.TokenValidateMiddleware)
 	task.Post("/create", handler.CreateTaskHandler)
 	task.Post("/update", handler.UpdateTaskHandler)
+	task.Post("/delete", handler.DeleteTaskHandler)
 }

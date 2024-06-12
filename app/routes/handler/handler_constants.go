@@ -11,4 +11,5 @@ const (
 	// Task Handler
 	CreateTaskHandlerMethod = "CreateTaskHandler"
 	UpdateTaskHandlerMethod = "UpdateTaskHandler"
+	DeleteTaskHandlerMethod = "DeleteTaskHandler"
 )

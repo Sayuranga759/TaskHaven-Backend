@@ -20,6 +20,7 @@ const (
 	AddTaskMethod 				= "AddTask"
 	UpdateTaskMethod 			= "UpdateTask"
 	GetTaskByIDMethod 			= "GetTaskByID"
+	DeleteTaskMethod 			= "DeleteTask"
 	IsTaskExistforUserMethod 	= "IsTaskExistforUser"
 )
 

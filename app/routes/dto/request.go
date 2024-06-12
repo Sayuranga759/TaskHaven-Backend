@@ -18,11 +18,16 @@ type ValidateTokenRequest struct {
 }
 
 type ManageTaskRequest struct {
-	TaskID      uint   		`json:"TaskID"`
+	TaskID      uint   		`json:"TaskID" validate:"required"`
 	UserID      uint   		`json:"UserID" `
 	PriorityID  uint   		`json:"PriorityID"`
 	Title       string 		`json:"Title" validate:"required,max=100"`
 	Description string 		`json:"Description" validate:"max=250"`
 	Status      Status 		`json:"Status" validate:"required,oneof=completed to_do on_hold"`
 	DueDate     time.Time 	`json:"DueDate" validate:"required,timestamp"`
+}
+
+type DeleteTaskRequest struct {
+	TaskID uint `json:"TaskID" validate:"required"`
+	UserID uint `json:"UserID"`
 }
