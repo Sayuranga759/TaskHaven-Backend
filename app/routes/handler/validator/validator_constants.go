@@ -45,7 +45,8 @@ const (
 	ValidateUserRegistrationMethod            = "ValidateUserRegistration"
 	ValidateLoginMethod					      = "ValidateLogin"
 	// Task validator methods
-	ValidateTaskDataMethod			= "ValidateTask"
+	ValidateCreateTaskMethod		= "ValidateCreateTask"
+	ValidateUpdateTaskMethod		= "ValidateUpdateTask"
 	ValidateDeleteTaskMethod		= "ValidateDeleteTask"
 	//
 	BuildValidationErrorResponseMethod        = "BuildValidationErrorResponse"

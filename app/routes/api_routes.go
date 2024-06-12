@@ -19,9 +19,10 @@ func APIRoutes(app *fiber.App) {
 	user.Post("/register", handler.UserRegistrationHandler)
 	user.Post("/login", handler.UserLoginHandler)
 
+	// task endpoints
 	task := route.Group("/task", middleware.TokenValidateMiddleware)
-	task.Get("/tasks", handler.GetTasksByUserIDHandler)
-	task.Post("/create", handler.CreateTaskHandler)
-	task.Post("/update", handler.UpdateTaskHandler)
-	task.Post("/delete", handler.DeleteTaskHandler)
+	task.Get("", handler.GetTasksByUserIDHandler)
+	task.Post("", handler.CreateTaskHandler)
+	task.Put("", handler.UpdateTaskHandler)
+	task.Delete("", handler.DeleteTaskHandler)
 }

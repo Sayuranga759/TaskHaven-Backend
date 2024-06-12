@@ -25,7 +25,7 @@ func CreateTaskSerivce(requestID string) *TaskService {
 	}
 }
 
-func (service TaskService) CreateTask(request dto.ManageTaskRequest) (response *dto.ManageTaskResponse, errResult *custom.ErrorResult) {
+func (service TaskService) CreateTask(request dto.CreateTaskRequest) (response *dto.ManageTaskResponse, errResult *custom.ErrorResult) {
 	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
 	utils.Logger.Debug(utils.TraceMsgFuncStart(CreateTaskMethod), commonLogFields...)
 
@@ -79,7 +79,7 @@ func (service TaskService) CreateTask(request dto.ManageTaskRequest) (response *
 	return response, nil
 }
 
-func (service TaskService) UpdateTask(request dto.ManageTaskRequest) (response *dto.ManageTaskResponse, errResult *custom.ErrorResult) {
+func (service TaskService) UpdateTask(request dto.UpdateTaskRequest) (response *dto.ManageTaskResponse, errResult *custom.ErrorResult) {
 	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
 	utils.Logger.Debug(utils.TraceMsgFuncStart(UpdateTaskMethod), commonLogFields...)
 
@@ -116,6 +116,7 @@ func (service TaskService) UpdateTask(request dto.ManageTaskRequest) (response *
 	}
 
 	task := dto.Tasks{
+		TaskID: request.TaskID,
 		UserID: request.UserID,
 		PriorityID: request.PriorityID,
 		Title: request.Title,
@@ -194,7 +195,7 @@ func (service TaskService) DeleteTask(request dto.DeleteTaskRequest) (response *
 	return nil, nil
 }
 
-func (service TaskService) GetTaskList(userID uint) (response *dto.UserTasksResponse, errResult *custom.ErrorResult) {
+func (service TaskService) GetTaskList(userID uint) (response dto.UserTasksResponse, errResult *custom.ErrorResult) {
 	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
 	utils.Logger.Debug(utils.TraceMsgFuncStart(GetTaskListMethod), commonLogFields...)
 
@@ -218,9 +219,9 @@ func (service TaskService) GetTaskList(userID uint) (response *dto.UserTasksResp
 		return nil, &errRes
 	}
 
+	response = dto.UserTasksResponse{}
 	for _, task := range tasks {
-		response.Tasks = append(response.Tasks,
-		dto.ManageTaskResponse{
+		response = append(response, dto.ManageTaskResponse{
 			TaskID: task.TaskID,
 			UserID: task.UserID,
 			PriorityID: task.PriorityID,
@@ -233,6 +234,7 @@ func (service TaskService) GetTaskList(userID uint) (response *dto.UserTasksResp
 
 	return response, nil
 }
+
 
 func (service TaskService) isTaskExistForUser(userID, taskID uint) (errResult *custom.ErrorResult) {
 	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)

@@ -23,6 +23,4 @@ type ManageTaskResponse struct {
 	DueDate     time.Time `json:"DueDate"`
 }
 
-type UserTasksResponse struct {
-	Tasks []ManageTaskResponse `json:"Tasks"`
-}
+type UserTasksResponse []ManageTaskResponse

@@ -9,13 +9,13 @@ import (
 	"go.uber.org/zap"
 )
 
-func ValidateTaskData(requestID string, ctx *fiber.Ctx) (dto.ManageTaskRequest, *custom.ErrorResult) {
+func ValidateCreateTask(requestID string, ctx *fiber.Ctx) (dto.CreateTaskRequest, *custom.ErrorResult) {
 	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
-	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateTaskDataMethod), commonLogFields...)
-	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateTaskDataMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateCreateTaskMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateCreateTaskMethod), commonLogFields...)
 
 	var (
-		request dto.ManageTaskRequest
+		request dto.CreateTaskRequest
 		body   	= string(ctx.Body())
 		err   	error
 	)
@@ -37,6 +37,34 @@ func ValidateTaskData(requestID string, ctx *fiber.Ctx) (dto.ManageTaskRequest, 
 	return request, nil
 }
 
+func ValidateUpdateTask(requestID string, ctx *fiber.Ctx) (dto.UpdateTaskRequest, *custom.ErrorResult) {
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
+	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateUpdateTaskMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateUpdateTaskMethod), commonLogFields...)
+
+	var (
+		request dto.UpdateTaskRequest
+		body   	= string(ctx.Body())
+		err   	error
+	)
+
+	err = ctx.BodyParser(&request)
+	if err != nil {
+		utils.Logger.Error(constant.InvalidInputAndPassErr, append(commonLogFields, []zap.Field{zap.String(constant.ErrorRequestBody, body), zap.Error(err)}...)...)
+		errorResult := custom.BuildBadReqErrResult(constant.BindingErrorCode, constant.InvalidRequestErrorMessage, err.Error())
+		
+		return request, &errorResult
+	}
+
+	errRes := ValidateRequest(requestID, request)
+	if errRes != nil {
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(ValidateRequestMethod), append(commonLogFields, zap.Any(constant.ErrorNote, errRes))...)
+		return request, errRes
+	}
+
+	return request, nil
+
+}
 
 func ValidateDeleteTask(requestID string, ctx *fiber.Ctx) (dto.DeleteTaskRequest, *custom.ErrorResult) {
 	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}

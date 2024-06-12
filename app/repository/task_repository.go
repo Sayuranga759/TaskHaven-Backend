@@ -53,7 +53,7 @@ func (repo *taskRepository) UpdateTask(task *dto.Tasks) (*dto.Tasks, error) {
 	utils.Logger.Debug(utils.TraceMsgFuncStart(UpdateTaskMethod), commonLogFields...)
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(UpdateTaskMethod), commonLogFields...)
 
-	if err := repo.getTransaction().Save(task).Error; err != nil {
+	if err := repo.getTransaction().Updates(task).Error; err != nil {
 		logFields := append(commonLogFields, zap.Any(Tasks, task), zap.Error(err))
 		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenUpdating(Tasks), logFields...)
 		return task, err

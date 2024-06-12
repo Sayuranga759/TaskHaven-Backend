@@ -24,15 +24,15 @@ func CreateTaskHandler(ctx *fiber.Ctx) error {
 		statusCode  int
 		errorResult *custom.ErrorResult
 		errRes      custom.ErrorResult
-		request	 	dto.ManageTaskRequest
+		request	 	dto.CreateTaskRequest
 		response    *dto.ManageTaskResponse
 		taskService = service.CreateTaskSerivce(requestID)
 	)
 
 	// validate
-	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateTaskDataMethod), commonLogFields...)
-	request, errorResult = validator.ValidateTaskData(requestID, ctx)
-	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateTaskDataMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateCreateTaskMethod), commonLogFields...)
+	request, errorResult = validator.ValidateCreateTask(requestID, ctx)
+	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateCreateTaskMethod), commonLogFields...)
 
 	request.UserID = ctx.Locals(TokenClaims).(*dto.JWTClaims).UserID
 
@@ -71,15 +71,15 @@ func UpdateTaskHandler(ctx *fiber.Ctx) error {
 		statusCode  int
 		errorResult *custom.ErrorResult
 		errRes      custom.ErrorResult
-		request	 	dto.ManageTaskRequest
+		request	 	dto.UpdateTaskRequest
 		response    *dto.ManageTaskResponse
 		taskService = service.CreateTaskSerivce(requestID)
 	)
 
 	// validate
-	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateTaskDataMethod), commonLogFields...)
-	request, errorResult = validator.ValidateTaskData(requestID, ctx)
-	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateTaskDataMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateUpdateTaskMethod), commonLogFields...)
+	request, errorResult = validator.ValidateUpdateTask(requestID, ctx)
+	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateUpdateTaskMethod), commonLogFields...)
 
 	request.UserID = ctx.Locals(TokenClaims).(*dto.JWTClaims).UserID
 
@@ -165,7 +165,7 @@ func GetTasksByUserIDHandler(ctx *fiber.Ctx) error {
 		statusCode  int
 		errorResult *custom.ErrorResult
 		errRes      custom.ErrorResult
-		response    *dto.UserTasksResponse
+		response    dto.UserTasksResponse
 		taskService = service.CreateTaskSerivce(requestID)
 	)
 
