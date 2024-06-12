@@ -1,15 +1,26 @@
 package repository
 
 const (
-	Email = "email"
+	Email  = "email"
+	TaskID = "task_id"
+	UserID = "user_id"
 )
 
+// Query constants
+const (
+	IfTaskIdAndUserIdEqual = "task_id = ? AND user_id = ?"
+)
+
+// Repository methods
 const (
 	// User repository methods
 	AddUserMethod 			= "AddUser"
 	GetUserByEmailMethod 	= "GetUserByEmail"
 	// Task repository methods
-	AddTaskMethod 			= "AddTask"
+	AddTaskMethod 				= "AddTask"
+	UpdateTaskMethod 			= "UpdateTask"
+	GetTaskByIDMethod 			= "GetTaskByID"
+	IsTaskExistforUserMethod 	= "IsTaskExistforUser"
 )
 
 // Table names

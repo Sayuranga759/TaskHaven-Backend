@@ -17,7 +17,8 @@ type ValidateTokenRequest struct {
 	Cookie string `json:"Cookie"`
 }
 
-type CreateTaskRequest struct {
+type ManageTaskRequest struct {
+	TaskID      uint   		`json:"TaskID"`
 	UserID      uint   		`json:"UserID" `
 	PriorityID  uint   		`json:"PriorityID"`
 	Title       string 		`json:"Title" validate:"required,max=100"`

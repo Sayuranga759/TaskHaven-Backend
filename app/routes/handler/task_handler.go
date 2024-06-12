@@ -24,15 +24,17 @@ func CreateTaskHandler(ctx *fiber.Ctx) error {
 		statusCode  int
 		errorResult *custom.ErrorResult
 		errRes      custom.ErrorResult
-		request	 	dto.CreateTaskRequest
-		response    *dto.CreateTaskResponse
+		request	 	dto.ManageTaskRequest
+		response    *dto.ManageTaskResponse
 		taskService = service.CreateTaskSerivce(requestID)
 	)
 
 	// validate
-	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateCreateTaskMethod), commonLogFields...)
-	request, errorResult = validator.ValidateCreateTask(requestID, ctx)
-	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateCreateTaskMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateTaskMethod), commonLogFields...)
+	request, errorResult = validator.ValidateTask(requestID, ctx)
+	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateTaskMethod), commonLogFields...)
+
+	request.UserID = ctx.Locals(TokenClaims).(*dto.JWTClaims).UserID
 
 	if errorResult == nil {
 		response, errorResult = taskService.CreateTask(request)
@@ -41,6 +43,53 @@ func CreateTaskHandler(ctx *fiber.Ctx) error {
 	if errorResult != nil {
 		logFields := append(commonLogFields, zap.Any(constant.ErrorNote, errorResult))
 		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(service.CreateTaskMethod), logFields...)
+
+		statusCode, errRes = HandleError(errorResult)
+	}
+
+	// Build the response
+	responseBuilder := responsebuilder.APIResponse{
+		Ctx:          	ctx,
+		HTTPStatus:   	statusCode,
+		ErrorResponse: 	errRes,
+		Response:     	response,
+		RequestID:    	requestID,
+	}
+	responseBuilder.BuildAPIResponse()
+
+	return nil
+}
+
+func UpdateTaskHandler(ctx *fiber.Ctx) error {
+	var requestID = web.GetRequestID(ctx)
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
+	utils.Logger.Info(utils.TraceMsgFuncStart(UpdateTaskHandlerMethod), commonLogFields...)
+
+	defer utils.Logger.Info(utils.TraceMsgFuncEnd(UpdateTaskHandlerMethod), commonLogFields...)
+
+	var (
+		statusCode  int
+		errorResult *custom.ErrorResult
+		errRes      custom.ErrorResult
+		request	 	dto.ManageTaskRequest
+		response    *dto.ManageTaskResponse
+		taskService = service.CreateTaskSerivce(requestID)
+	)
+
+	// validate
+	utils.Logger.Debug(utils.TraceMsgBeforeInvoke(validator.ValidateTaskMethod), commonLogFields...)
+	request, errorResult = validator.ValidateTask(requestID, ctx)
+	utils.Logger.Debug(utils.TraceMsgAfterInvoke(validator.ValidateTaskMethod), commonLogFields...)
+
+	request.UserID = ctx.Locals(TokenClaims).(*dto.JWTClaims).UserID
+
+	if errorResult == nil {
+		response, errorResult = taskService.UpdateTask(request)
+	}
+
+	if errorResult != nil {
+		logFields := append(commonLogFields, zap.Any(constant.ErrorNote, errorResult))
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(service.UpdateTaskMethod), logFields...)
 
 		statusCode, errRes = HandleError(errorResult)
 	}

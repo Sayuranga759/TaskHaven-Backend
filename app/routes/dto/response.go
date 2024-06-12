@@ -13,7 +13,9 @@ type LoginResponse struct {
 	AccessToken string `json:"AccessToken"`
 }
 
-type CreateTaskResponse struct {
+type ManageTaskResponse struct {
+	TaskID      uint      `json:"TaskID"`
+	UserID      uint      `json:"UserID"`
 	PriorityID  uint      `json:"PriorityID"`
 	Title       string    `json:"Title"`
 	Description string    `json:"Description"`

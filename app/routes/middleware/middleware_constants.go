@@ -6,7 +6,7 @@ const (
 
 const (
 	Email              = "Email"
-	tokenClaims        = "tokenClaims"
+	TokenClaims        = "tokenClaims"
 )
 
 const (

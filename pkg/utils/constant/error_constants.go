@@ -52,6 +52,7 @@ const (
 	ErrInvalidUserCredentialsCode         = "0019"
 	ErrInvalidAuthCodeCode                = "0021"
 	ErrCookieNotFoundCode				  = "0025"
+	ErrUserDoNotHaveAccessCode            = "0026"
 	// db error codes
 	ErrRecordNotFoundCode   = "0022"
 	ErrDatabaseCode         = "0023"
@@ -112,6 +113,7 @@ const (
 	ErrInvalidAuthCodeMsg                = "invalid authorization code"
 	ErrOccurredWhenSigningJWTTokenMsg    = "error occurred when signing jwt token"
 	ErrCookieNotFoundMsg				 = "cookie not found"
+	ErrUserDoNotHaveAccessMsg            = "user does not have access to this resource"
 	// email error message
 	ErrEmailUniqueConstraintViolationMsg = "Email already exists"
 	// timeonly error message

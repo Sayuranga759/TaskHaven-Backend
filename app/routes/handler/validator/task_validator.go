@@ -9,13 +9,13 @@ import (
 	"go.uber.org/zap"
 )
 
-func ValidateCreateTask(requestID string, ctx *fiber.Ctx) (dto.CreateTaskRequest, *custom.ErrorResult) {
+func ValidateTask(requestID string, ctx *fiber.Ctx) (dto.ManageTaskRequest, *custom.ErrorResult) {
 	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
-	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateCreateTaskMethod), commonLogFields...)
-	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateCreateTaskMethod), commonLogFields...)
+	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateTaskMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateTaskMethod), commonLogFields...)
 
 	var (
-		request dto.CreateTaskRequest
+		request dto.ManageTaskRequest
 		body   	= string(ctx.Body())
 		err   	error
 	)
