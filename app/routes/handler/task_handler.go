@@ -153,3 +153,42 @@ func DeleteTaskHandler(ctx *fiber.Ctx) error {
 
 	return nil
 }
+
+func GetTasksByUserIDHandler(ctx *fiber.Ctx) error {
+	var requestID = web.GetRequestID(ctx)
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, requestID)}
+	utils.Logger.Info(utils.TraceMsgFuncStart(GetTasksByUserIDHandlerMethod), commonLogFields...)
+
+	defer utils.Logger.Info(utils.TraceMsgFuncEnd(GetTasksByUserIDHandlerMethod), commonLogFields...)
+
+	var (
+		statusCode  int
+		errorResult *custom.ErrorResult
+		errRes      custom.ErrorResult
+		response    *dto.UserTasksResponse
+		taskService = service.CreateTaskSerivce(requestID)
+	)
+
+	userID := ctx.Locals(TokenClaims).(*dto.JWTClaims).UserID
+
+	response, errorResult = taskService.GetTaskList(userID)
+
+	if errorResult != nil {
+		logFields := append(commonLogFields, zap.Any(constant.ErrorNote, errorResult))
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(service.GetTaskListMethod), logFields...)
+
+		statusCode, errRes = HandleError(errorResult)
+	}
+
+	// Build the response
+	responseBuilder := responsebuilder.APIResponse{
+		Ctx:          	ctx,
+		HTTPStatus:   	statusCode,
+		ErrorResponse: 	errRes,
+		Response:     	response,
+		RequestID:    	requestID,
+	}
+	responseBuilder.BuildAPIResponse()
+
+	return nil
+}

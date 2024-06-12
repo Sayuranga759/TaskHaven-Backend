@@ -21,6 +21,7 @@ const (
 	CreateTaskMethod 		 = "CreateTask"
 	UpdateTaskMethod 		 = "UpdateTask"
 	DeleteTaskMethod 		 = "DeleteTask"
+	GetTaskListMethod 		 = "GetTaskList"
 	isTaskExistforUserMethod = "isTaskExistforUser"
 	// Service bootstrap methods
 	HandleTransactionMethod            = "HandleTransaction"

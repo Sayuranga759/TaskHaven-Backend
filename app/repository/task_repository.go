@@ -14,6 +14,7 @@ type TaskRepository interface {
 	UpdateTask(task *dto.Tasks) (*dto.Tasks, error)
 	DeleteTask(taskID uint) (*dto.Tasks, error)
 	IsTaskExistforUser(taskID, userID uint) (bool, error)
+	GetTasksByUserID(userID uint) ([]dto.Tasks, error)
 }
 
 type taskRepository struct {
@@ -89,6 +90,21 @@ func (repo *taskRepository) DeleteTask(taskID uint) (*dto.Tasks, error) {
 	}
 
 	return task, nil
+}
+
+func (repo *taskRepository) GetTasksByUserID(userID uint) ([]dto.Tasks, error) {
+	commonLogFields := []zap.Field{zap.String(constant.TraceMsgReqID, repo.repositoryContext.RequestID)}
+	utils.Logger.Debug(utils.TraceMsgFuncStart(GetTasksByUserIDMethod), commonLogFields...)
+	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(GetTasksByUserIDMethod), commonLogFields...)
+
+	var tasks []dto.Tasks
+	if err := repo.db.Where(&dto.Tasks{UserID: userID}).Find(&tasks).Error; err != nil {
+		logFields := append(commonLogFields, zap.Uint(UserID, userID), zap.Error(err))
+		utils.Logger.Error(utils.TraceMsgErrorOccurredWhenSelecting(Tasks), logFields...)
+		return nil, err
+	}
+
+	return tasks, nil
 }
 
 

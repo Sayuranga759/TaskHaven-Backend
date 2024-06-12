@@ -19,7 +19,7 @@ const (
 	// Task repository methods
 	AddTaskMethod 				= "AddTask"
 	UpdateTaskMethod 			= "UpdateTask"
-	GetTaskByIDMethod 			= "GetTaskByID"
+	GetTasksByUserIDMethod 		= "GetTasksByUserID"
 	DeleteTaskMethod 			= "DeleteTask"
 	IsTaskExistforUserMethod 	= "IsTaskExistforUser"
 )

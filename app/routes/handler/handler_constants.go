@@ -9,7 +9,8 @@ const (
 	UserRegistrationHandlerMethod = "UserRegistrationHandler"
 	UserLoginHandlerMethod		  = "UserLoginHandler"
 	// Task Handler
-	CreateTaskHandlerMethod = "CreateTaskHandler"
-	UpdateTaskHandlerMethod = "UpdateTaskHandler"
-	DeleteTaskHandlerMethod = "DeleteTaskHandler"
+	GetTasksByUserIDHandlerMethod 	= "GetTasksByUserIDHandler"
+	CreateTaskHandlerMethod 		= "CreateTaskHandler"
+	UpdateTaskHandlerMethod 		= "UpdateTaskHandler"
+	DeleteTaskHandlerMethod 		= "DeleteTaskHandler"
 )

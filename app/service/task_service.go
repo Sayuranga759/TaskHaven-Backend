@@ -194,6 +194,46 @@ func (service TaskService) DeleteTask(request dto.DeleteTaskRequest) (response *
 	return nil, nil
 }
 
+func (service TaskService) GetTaskList(userID uint) (response *dto.UserTasksResponse, errResult *custom.ErrorResult) {
+	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
+	utils.Logger.Debug(utils.TraceMsgFuncStart(GetTaskListMethod), commonLogFields...)
+
+	defer func() {
+		// Panic handling
+		if r := recover(); r != nil {
+			utils.Logger.Error(constant.PanicOccurred, utils.TraceStack(commonLogFields, debug.Stack())...)
+			errResult = buildPanicErr(GetTaskListMethod)
+		}
+
+		utils.Logger.Debug(utils.TraceMsgFuncEnd(GetTaskListMethod), commonLogFields...)
+	}()
+
+	service.taskRepo = repository.CreateTaskRepository(service.ServiceContext.RequestID, nil)
+
+	tasks, err := service.taskRepo.GetTasksByUserID(userID)
+	if err != nil {
+		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(GetTaskListMethod), append(commonLogFields, zap.Any(constant.ErrorNote, err))...)
+		errRes := custom.BuildInternalServerErrResult(constant.ErrDatabaseCode, constant.ErrDatabaseMsg, err.Error())
+
+		return nil, &errRes
+	}
+
+	for _, task := range tasks {
+		response.Tasks = append(response.Tasks,
+		dto.ManageTaskResponse{
+			TaskID: task.TaskID,
+			UserID: task.UserID,
+			PriorityID: task.PriorityID,
+			Title: task.Title,
+			Description: task.Description,
+			Status: task.Status,
+			DueDate: task.DueDate,
+		})
+	}
+
+	return response, nil
+}
+
 func (service TaskService) isTaskExistForUser(userID, taskID uint) (errResult *custom.ErrorResult) {
 	commonLogFields := utils.CommonLogField(service.ServiceContext.RequestID)
 	utils.Logger.Debug(utils.TraceMsgFuncStart(isTaskExistforUserMethod), commonLogFields...)
