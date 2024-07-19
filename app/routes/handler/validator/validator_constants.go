@@ -7,6 +7,7 @@ const (
 	alphaNumericWithHyphenSpaceRegex         = "[^A-Za-z0-9- ]"
 	alphaNumericWithHyphenDotAndAddressRegex = "[^A-Za-z0-9-.@]"
 	alphaRegex                               = "[^A-Za-z]"
+	alphaWithSpaceRegex                      = "[^A-Za-z ]"
 	phoneNumberWithPlusRegex                 = `^\+([0-9]){11,}$`
 	phoneNumberWithoutPlusRegex              = `^[0-9]{10,}$`
 	positiveIntegerWithPlusRegex             = `[^+0-9]`
@@ -21,6 +22,7 @@ const (
 	alphaNumericWithHyphen      = "alphaNumericWithHyphen"
 	alphaNumericWithHyphenSpace = "alphaNumericWithHyphenSpace"
 	alpha                       = "alpha"
+	alphaWithSpace              = "alphaWithSpace"
 	required                    = "required"
 	requiredWithout             = "required_without"
 	requiredWith                = "required_with"

@@ -8,7 +8,7 @@ import (
 
 func APIRoutes(app *fiber.App) {
 
-	route := app.Group("/todo/v1")
+	route := app.Group("/taskhaven/v1")
 
 	// health endpoints
 	route.Get("livez", handler.Lives)

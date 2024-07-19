@@ -25,6 +25,10 @@ func RegisterCustomValidation(validate *validator.Validate) {
 		return containsOnly(fl.Field().String(), alphaRegex)
 	})
 
+	validate.RegisterValidation(alphaWithSpace, func(fl validator.FieldLevel) bool {
+		return containsOnly(fl.Field().String(), alphaWithSpaceRegex)
+	})
+
 	validate.RegisterValidation(alphaNumeric, func(fl validator.FieldLevel) bool {
 		return containsOnly(fl.Field().String(), alphaNumericRegex)
 	})
@@ -56,6 +60,13 @@ func RegisterCustomTranslation(validate *validator.Validate, trans ut.Translator
 		return ut.Add(alpha, "{0} must contain alpha characters", true)
 	}, func(ut ut.Translator, fe validator.FieldError) string {
 		t, _ := ut.T(alpha, fe.Field())
+		return t
+	})
+
+	validate.RegisterTranslation(alphaWithSpace, trans, func(ut ut.Translator) error {
+		return ut.Add(alphaWithSpace, "{0} must contain only alpha characters with spaces", true)
+	}, func(ut ut.Translator, fe validator.FieldError) string {
+		t, _ := ut.T(alphaWithSpace, fe.Field())
 		return t
 	})
 

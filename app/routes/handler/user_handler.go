@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/dto"
-	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/handler/helper"
 	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/handler/validator"
 	"github.com/Sayuranga759/TaskHaven-Backend/app/service"
 	"github.com/Sayuranga759/TaskHaven-Backend/pkg/custom"
@@ -89,12 +88,7 @@ func UserLoginHandler(ctx *fiber.Ctx) error {
 		utils.Logger.Error(utils.TraceMsgErrorOccurredFrom(service.LoginMethod), logFields...)
 
 		statusCode, errRes = HandleError(errorResult)
-	} else {
-		// Set the cookie
-		utils.Logger.Debug(utils.TraceMsgBeforeInvoke(helper.BuildCookieMethod), commonLogFields...)
-		helper.BuildCookie(requestID, response.AccessToken, ctx)
-		utils.Logger.Debug(utils.TraceMsgAfterInvoke(helper.BuildCookieMethod), commonLogFields...)
-	}
+	} 
 
 	// Build the response
 	responseBuilder := responsebuilder.APIResponse {

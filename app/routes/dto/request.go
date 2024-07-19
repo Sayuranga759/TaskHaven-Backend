@@ -3,7 +3,7 @@ package dto
 import "time"
 
 type UserRegistrationRequest struct {
-	Name     string `json:"Name" validate:"required,max=50,alpha"`
+	Name     string `json:"Name" validate:"required,max=50,alphaWithSpace"`
 	Email    string `json:"Email" validate:"required,max=100,email"`
 	Password string `json:"Password" validate:"required,min=8,password"`
 }
@@ -14,7 +14,7 @@ type LoginRequest struct {
 }
 
 type ValidateTokenRequest struct {
-	Cookie string `json:"Cookie"`
+	AuthString string `json:"AuthString"`
 }
 
 type CreateTaskRequest struct {

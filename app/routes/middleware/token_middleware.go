@@ -25,10 +25,8 @@ func TokenValidateMiddleware(ctx *fiber.Ctx) error {
 		tokenService = service.CreateTokenSerivce(requestID)
 	)
 
-	cookie := ctx.Cookies(constant.CookieName)
-
 	request := dto.ValidateTokenRequest{
-		Cookie: cookie,
+		AuthString: ctx.Get(Authorization),
 	}
 
 	response, errRes = tokenService.ValidateToken(request)

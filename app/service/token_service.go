@@ -29,14 +29,14 @@ func (service TokenService) ValidateToken(request dto.ValidateTokenRequest) (res
 	utils.Logger.Debug(utils.TraceMsgFuncStart(ValidateTokenMethod), commonLogFields...)
 	defer utils.Logger.Debug(utils.TraceMsgFuncEnd(ValidateTokenMethod), commonLogFields...)
 
-	if request.Cookie == constant.Empty {
+	if request.AuthString == constant.Empty {
 		utils.Logger.Error(constant.ErrCookieNotFoundMsg, commonLogFields...)
 		errResult := custom.BuildBadReqErrResult(constant.ErrCookieNotFoundCode, constant.ErrCookieNotFoundMsg, constant.Empty)
 
 		return nil, &errResult
 	}
 
-	token, errResult := service.validateTokenSignature(request.Cookie, config.GetConfig().JWTSecret)
+	token, errResult := service.validateTokenSignature(request.AuthString, config.GetConfig().JWTSecret)
 	if errResult != nil {
 		utils.Logger.Error(constant.ErrInvalidTokenSignatureMsg, commonLogFields...)
 		return nil, errResult
