@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Sayuranga759/TaskHaven-Backend/app/routes/dto"
@@ -36,7 +37,15 @@ func (service TokenService) ValidateToken(request dto.ValidateTokenRequest) (res
 		return nil, &errResult
 	}
 
-	token, errResult := service.validateTokenSignature(request.AuthString, config.GetConfig().JWTSecret)
+	slittedTokenStr := strings.Split(request.AuthString, constant.Space)
+	if len(slittedTokenStr) != constant.IntTwo {
+		utils.Logger.Error(constant.ErrOccurredWhenStringSplitToArrayMsg, commonLogFields...)
+		errResult := custom.BuildBadReqErrResult(constant.ErrOccurredWhenStringSplitToArrayCode, constant.ErrOccurredWhenStringSplitToArrayMsg, constant.Empty)
+
+		return nil, &errResult
+	}
+
+	token, errResult := service.validateTokenSignature(slittedTokenStr[constant.IntOne], config.GetConfig().JWTSecret)
 	if errResult != nil {
 		utils.Logger.Error(constant.ErrInvalidTokenSignatureMsg, commonLogFields...)
 		return nil, errResult
